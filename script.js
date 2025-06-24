@@ -24,7 +24,8 @@ document.getElementById('itemForm').addEventListener('submit', function(e) {
     ${imageHTML}
   `;
 
-  document.getElementById('itemsContainer')?.prepend(itemCard);
+  const containerId = type === 'found' ? 'foundItemsContainer' : 'lostItemsContainer';
+document.getElementById(containerId)?.prepend(itemCard);
   this.reset();
   fileInput.value = '';
 });
