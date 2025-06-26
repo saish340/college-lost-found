@@ -1,36 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Submit Item | Lost & Found</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Submit Lost Item</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <nav>
-    <a href="submit.html">Submit Item</a>
-    <a href="items.html">View Items</a>
-    <a href="index.html">Logout</a>
-  </nav>
 
-  <header><h1>Submit Lost or Found Item</h1></header>
 
-  <main>
-    <section class="form-section">
-      <form id="itemForm">
-        <input type="text" placeholder="Your Name" required>
-        <input type="text" placeholder="Item Name" required>
-        <select id="itemType" required>
-          <option value="">-- Select Type --</option>
-          <option value="lost">Lost</option>
-          <option value="found">Found</option>
-        </select>
-        <textarea placeholder="Description" required></textarea>
-        <input type="file" id="imageInput" accept="image/*" style="display: none;">
-        <label for="imageInput" id="uploadLabel">Upload Image (Only for Found)</label>
-        <button type="submit">Submit</button>
-      </form>
-    </section>
-  </main>
+  <h2>Welcome, <span id="studentName">Student</span></h2>
+
+  <form id="lostForm">
+    <input type="text" id="itemName" placeholder="Item Name" required />
+    <input type="text" id="itemDesc" placeholder="Description" required />
+    <input type="file" id="itemImageFile" accept="image/*" />
+    <button type="submit">Submit</button>
+  </form>
+
+  <div style="text-align:center; margin-top: 20px;">
+    <a href="items.html">View Lost Items</a>
+  </div>
+
+
+  <script>
+    const studentName = localStorage.getItem("studentName") || "Student";
+    document.getElementById("studentName").innerText = studentName;
+    document.getElementById("studentName").innerText = localStorage.getItem("studentName") || "Student";
+
+  </script>
 
   <script src="script.js"></script>
 </body>

@@ -1,23 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Items Listed | Lost & Found</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>All Lost Items</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <nav>
-    <a href="submit.html">Submit Item</a>
-    <a href="items.html">View Items</a>
-    <a href="index.html">Logout</a>
-  </nav>
 
-  <header><h1>All Reported Items</h1></header>
-  <main>
-    <section class="list-section">
-      <div id="lostItemsContainer"><h2>Lost Items</h2></div>
-<div id="foundItemsContainer"><h2>Found Items</h2></div>
-    </section>
-  </main>
+  <!-- 👤 Greet student -->
+  <h2>Welcome, <span id="studentName">Student</span></h2>
+
+  <!-- 🔍 Search bar -->
+  <div style="text-align:center; margin-bottom: 20px;">
+    <input type="text" id="searchInput" placeholder="Search items..." />
+  </div>
+
+  <!-- 📦 Items go here -->
+  <div id="itemsContainer"></div>
+
+  <!-- 🔘 Navigation buttons -->
+  <div style="text-align:center; margin-top: 20px;">
+    <a href="home.html"><button>⬅️ Back to Dashboard</button></a>
+    <button onclick="logout()">🚪 Logout</button>
+  </div>
+
+  <script>
+    const studentName = localStorage.getItem("studentName") || "Student";
+    document.getElementById("studentName").innerText = studentName;
+
+    const searchInput = document.getElementById("searchInput");
+    searchInput.addEventListener("input", displayItems);
+
+    function displayItems() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const container = document.getElementById("itemsContainer");
+      container.innerHTML = "";
+
+      const items = JSON.parse(localStorage.getItem("lostItems")) || [];
+
+      items.forEach((item, index) => {
+        const match = item.name.toLowerCase().includes(searchTerm) ||
+                      item.desc.toLowerCase().includes(searchTerm);
+
+        if (!match) return;
+
+        const card = document.createElement("div");
+        card.className = "item-card";
+
+        card.innerHTML = `
+          ${item.image ? `<img src="${item.image}" alt="Item Image">` : ""}
+          <h3>${item.name}</h3>
+          <p>${item.desc}</p>
+          <p><small><b>Submitted by:</b> ${item.submittedBy}</small></p>
+        `;
+
+        // Only show delete if the item was submitted by the logged-in student
+        if (item.submittedBy === studentName) {
+          const deleteBtn = document.createElement("button");
+          deleteBtn.innerText = "Delete";
+          deleteBtn.onclick = () => deleteItem(index);
+          card.appendChild(deleteBtn);
+        }
+
+        container.appendChild(card);
+      });
+    }
+
+    function deleteItem(index) {
+      let items = JSON.parse(localStorage.getItem("lostItems")) || [];
+      items.splice(index, 1);
+      localStorage.setItem("lostItems", JSON.stringify(items));
+      displayItems();
+    }
+
+    function logout() {
+      localStorage.removeItem("studentName");
+      window.location.href = "login.html";
+    }
+
+    // Load on page open
+    window.onload = displayItems;
+  </script>
+
 </body>
 </html>

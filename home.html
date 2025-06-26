@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <h2 id="welcomeText">Welcome</h2>
+
+  <div style="text-align:center; margin-top: 30px;">
+    <a href="submit.html"><button>Submit Lost Item</button></a>
+    <a href="items.html"><button>View Lost Items</button></a>
+  </div>
+
+  <script>
+    // Show personalized welcome message
+    const name = localStorage.getItem("studentName") || "Student";
+    document.getElementById("welcomeText").innerText = `Welcome, ${name}`;
+  </script>
+
+</body>
+</html>

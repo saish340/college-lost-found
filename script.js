@@ -1,31 +1,48 @@
-document.getElementById('itemForm').addEventListener('submit', function(e) {
+document.getElementById("lostForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
-  const name = this[0].value;
-  const itemName = this[1].value;
-  const type = this[2].value;
-  const description = this[3].value;
-  const fileInput = document.getElementById('imageInput');
-  const file = fileInput.files[0];
+  const name = document.getElementById("itemName").value.trim();
+  const desc = document.getElementById("itemDesc").value.trim();
+  const imageInput = document.getElementById("itemImageFile");
+  const student = localStorage.getItem("studentName") || "Unknown";
 
-  const itemCard = document.createElement('div');
-  itemCard.className = 'item-card';
+  const reader = new FileReader();
 
-  let imageHTML = '';
-  if (type === 'found' && file) {
-    const imageURL = URL.createObjectURL(file);
-    imageHTML = `<img src="${imageURL}" style="max-width: 100%; margin-top: 10px;">`;
+  reader.onload = function () {
+    const imageBase64 = reader.result;
+
+    const item = {
+      name,
+      desc,
+      image: imageBase64,
+      submittedBy: student // ✅ track student name
+    };
+
+    let items = JSON.parse(localStorage.getItem("lostItems")) || [];
+    items.push(item);
+    localStorage.setItem("lostItems", JSON.stringify(items));
+
+    document.getElementById("lostForm").reset();
+    alert("Item submitted successfully!");
+  };
+
+  // 👇 If image uploaded, read it
+  if (imageInput.files.length > 0) {
+    reader.readAsDataURL(imageInput.files[0]);
+  } else {
+    // 👇 If no image, still save the entry
+    const item = {
+      name,
+      desc,
+      image: "",
+      submittedBy: student
+    };
+
+    let items = JSON.parse(localStorage.getItem("lostItems")) || [];
+    items.push(item);
+    localStorage.setItem("lostItems", JSON.stringify(items));
+
+    document.getElementById("lostForm").reset();
+    alert("Item submitted successfully!");
   }
-
-  itemCard.innerHTML = `
-    <strong>${itemName}</strong> (${type.toUpperCase()})<br>
-    <em>Reported by ${name}</em><br>
-    <p>${description}</p>
-    ${imageHTML}
-  `;
-
-  const containerId = type === 'found' ? 'foundItemsContainer' : 'lostItemsContainer';
-document.getElementById(containerId)?.prepend(itemCard);
-  this.reset();
-  fileInput.value = '';
 });
