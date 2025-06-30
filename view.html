@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>View Lost Items</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <header>
+    <div class="navbar">
+      <img src="vp-logo.png" alt="College Logo" class="logo" />
+      <h1>Lost Items</h1>
+    </div>
+  </header>
+
+  <main class="hero">
+    <div class="login-box" style="width: 90%; max-width: 800px;">
+      <h2>Your Submitted Items</h2>
+      <input type="text" id="searchInput" placeholder="Search by name, description, or location..." />
+      <div id="items-container"></div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 VPKBIET Lost & Found Portal</p>
+  </footer>
+
+  <script>
+    const container = document.getElementById("items-container");
+    const searchInput = document.getElementById("searchInput");
+    const student = localStorage.getItem("studentID");
+    let items = JSON.parse(localStorage.getItem("lostItems")) || [];
+
+    function renderItems(query = "") {
+      container.innerHTML = "";
+
+      const filtered = items.filter(item =>
+        item.student === student &&
+        (
+          item.name.toLowerCase().includes(query) ||
+          item.desc.toLowerCase().includes(query) ||
+          item.location.toLowerCase().includes(query)
+        )
+      );
+
+      if (filtered.length === 0) {
+        container.innerHTML = "<p>No items found.</p>";
+      } else {
+        filtered.forEach(item => {
+          const card = document.createElement("div");
+          card.className = "item-card";
+          card.innerHTML = `
+            <img src="${item.image}" alt="${item.name}" class="item-img"/>
+            <h3>${item.name} ${item.found ? "<span class='found-tag'>(Found)</span>" : ""}</h3>
+            <p><strong>Description:</strong> ${item.desc}</p>
+            <p><strong>Location:</strong> ${item.location}</p>
+            <button onclick="deleteItem(${item.id})">Delete</button>
+            <button onclick="markFound(${item.id})">${item.found ? "Mark as Lost" : "Mark as Found"}</button>
+          `;
+          container.appendChild(card);
+        });
+      }
+    }
+
+    function deleteItem(id) {
+      items = items.filter(item => item.id !== id);
+      localStorage.setItem("lostItems", JSON.stringify(items));
+      renderItems(searchInput.value.toLowerCase());
+    }
+
+    function markFound(id) {
+      items = items.map(item => {
+        if (item.id === id) {
+          item.found = !item.found;
+        }
+        return item;
+      });
+      localStorage.setItem("lostItems", JSON.stringify(items));
+      renderItems(searchInput.value.toLowerCase());
+    }
+
+    searchInput.addEventListener("input", () => {
+      renderItems(searchInput.value.toLowerCase());
+    });
+
+    renderItems();
+  </script>
+</body>
+</html>

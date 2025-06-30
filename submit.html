@@ -1,34 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Submit Lost Item</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
+  <header>
+    <div class="navbar">
+      <img src="vp-logo.png" alt="College Logo" class="logo" />
+      <h1>Submit Lost Item</h1>
+    </div>
+  </header>
 
+  <main class="hero">
+    <div class="login-box">
+      <h2>Item Details</h2>
+      <input type="text" id="itemName" placeholder="Item Name" />
+      <input type="text" id="itemDesc" placeholder="Description" />
+      <input type="text" id="itemLocation" placeholder="Where You Lost It" />
+      <input type="file" id="itemImage" accept="image/*" />
+      <button onclick="submitItem()">Submit</button>
+      <p id="submit-msg" class="error"></p>
+    </div>
+  </main>
 
-  <h2>Welcome, <span id="studentName">Student</span></h2>
-
-  <form id="lostForm">
-    <input type="text" id="itemName" placeholder="Item Name" required />
-    <input type="text" id="itemDesc" placeholder="Description" required />
-    <input type="file" id="itemImageFile" accept="image/*" />
-    <button type="submit">Submit</button>
-  </form>
-
-  <div style="text-align:center; margin-top: 20px;">
-    <a href="items.html">View Lost Items</a>
-  </div>
-
+  <footer>
+    <p>&copy; 2025 VPKBIET Lost & Found Portal</p>
+  </footer>
 
   <script>
-    const studentName = localStorage.getItem("studentName") || "Student";
-    document.getElementById("studentName").innerText = studentName;
-    document.getElementById("studentName").innerText = localStorage.getItem("studentName") || "Student";
+    function submitItem() {
+      const name = document.getElementById("itemName").value;
+      const desc = document.getElementById("itemDesc").value;
+      const location = document.getElementById("itemLocation").value;
+      const imageInput = document.getElementById("itemImage");
+      const student = localStorage.getItem("studentID");
 
+      if (!name || !desc || !location || imageInput.files.length === 0) {
+        document.getElementById("submit-msg").textContent = "Please fill all fields and upload an image.";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const imageBase64 = e.target.result;
+        const item = {
+          id: Date.now(),
+          name,
+          desc,
+          location,
+          image: imageBase64,
+          student
+        };
+
+        let items = JSON.parse(localStorage.getItem("lostItems")) || [];
+        items.push(item);
+        localStorage.setItem("lostItems", JSON.stringify(items));
+        alert("Item submitted successfully!");
+        window.location.href = "dashboard.html";
+      };
+      reader.readAsDataURL(imageInput.files[0]);
+    }
   </script>
-
-  <script src="script.js"></script>
 </body>
 </html>
