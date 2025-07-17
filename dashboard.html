@@ -5,36 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard - Lost & Found</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
     <div class="navbar">
-      <h1>Welcome to Lost & Found Portal</h1>
-      <p id="welcomeUser"></p>
+      <img src="vp-logo.png" alt="College Logo" class="logo" />
+      <h1>Vidya Pratishthan's Kamalnayan Bajaj Institute of Engineering & Technology</h1>
     </div>
   </header>
 
-  <main>
-    <section>
-      <h2>Submit Lost Item</h2>
-      <form id="lostItemForm">
-        <input type="text" id="itemName" placeholder="Item Name" required /><br>
-        <textarea id="description" placeholder="Description" required></textarea><br>
-        <button type="submit">Submit</button>
-      </form>
-    </section>
+  <main class="hero">
+ <div class="login-box">
+  <h2>Welcome, <span id="welcomeUser">Student</span></h2>
 
-    <section>
-      <h2>Your Submitted Items</h2>
-      <div id="itemsList"></div>
-    </section>
+  <!-- Go to view.html -->
+  <button onclick="window.location.href='view.html'">View Lost Items</button>
+
+  <h3>Submit Lost Item</h3>
+  <form id="lostItemForm">
+    <input type="text" id="itemName" placeholder="Item Name" required><br>
+    <textarea id="description" placeholder="Description" required></textarea><br>
+    <input type="file" id="itemImage" accept="image/*"><br>
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
   </main>
 
-  <!-- Firebase SDKs -->
+  <footer>
+    <p>&copy; 2025 VPKBIET Lost & Found Portal</p>
+  </footer>
+
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js"></script>
 
-  <!-- Firebase Init -->
+  <!-- Firebase Config -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDCKHY9RKdF6MCMYNKcNlEvr7ZYvpwa4j4",
@@ -42,14 +49,13 @@
       projectId: "college-lost-found-723c4",
       storageBucket: "college-lost-found-723c4.firebasestorage.app",
       messagingSenderId: "405605736194",
-      appId: "1:405605736194:web:daea6edddb53629873ac1b",
-      measurementId: "G-CNEGY73G5M"
+      appId: "1:405605736194:web:daea6edddb53629873ac1b"
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
   </script>
 
-  <!-- App Script -->
+  <!-- Script -->
   <script src="script.js"></script>
 </body>
 </html>

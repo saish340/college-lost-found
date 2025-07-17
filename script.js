@@ -73,3 +73,32 @@ function loadMyItems(studentID) {
       console.error("Error getting items:", err);
     });
 }
+function login() {
+  const id = document.getElementById("studentID").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const errorEl = document.getElementById("login-error");
+
+  if (id === "" || password === "") {
+    errorEl.textContent = "Please enter Student ID and Password.";
+    return;
+  }
+
+  localStorage.setItem("studentID", id);
+  window.location.href = "dashboard.html";
+}
+
+// Make it accessible from HTML
+window.login = login;
+function showSection(section) {
+  document.getElementById("submitSection").style.display = section === "submit" ? "block" : "none";
+  document.getElementById("viewSection").style.display = section === "view" ? "block" : "none";
+
+  if (section === "view") {
+    const studentID = localStorage.getItem("studentID");
+    if (studentID) {
+      loadMyItems(studentID);
+    }
+  }
+}
+
+
